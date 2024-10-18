@@ -7,6 +7,7 @@
 #include <string>
 #include <ctime>
 #include <cstdlib>
+#include <fstream>
 using namespace std;
 
 const int MIN_NR = 10, MAX_NR = 99, MIN_LS = 5, MAX_LS = 20;
@@ -236,16 +237,87 @@ public:
         }
         cout << endl;
     }
+
+    // DoublyLinkedList Empty List
+    bool emptyLine() const
+    {
+        return head == nullptr;
+    }
+    int frontLine() const
+    {
+        if (emptyLine())
+        {
+            throw runtime_error("List is Empty");
+        }
+        return head->data;
+    }
+    int backLine() const
+    {
+        if (emptyLine())
+        {
+            throw runtime_error("List is Empty");
+        }
+        return tail->data;
+    }
 };
 
 int main()
 {
 
-    srand(time(nullptr)); //Seeds random Number Generator
+    srand(time(nullptr)); // Seeds random Number Generator
 
-    //read names from File
+    // read names from File
     vector<string> names;
-    
+
+    ifstream inFile("C:/Lab210/names.txt");
+
+    if (!inFile.is_open())
+    {
+        cout << "Error Can't open File" << endl;
+        return 1;
+    }
+    string name;
+    while (getline(inFile, name))
+    {
+        names.push_back(name);
+    }
+    // Closing the File
+    inFile.close();
+
+    DoublyLinkedList line;
+    int currentTime = 1;
+    int totalTime = 20;
+
+    // Open Store with Initial 5 customers
+    for (int i = 0; i < 5; i++)
+    {
+        int randomNames = rand() % names.size();
+        line.push_back(name[randomNames]);
+    }
+    while (currentTime <= totalTime)
+    {
+        cout << "Time step #" << currentTime << endl;
+
+        // Customer Served at the Front
+        if (rand() % 100 + 1 <= 40 && !line.emptyLine())
+        {
+            cout << line.frontLine() << " is served." << endl;
+            line.pop_front();
+        }
+        // New Customer Joins the back
+        if (rand() % 100 + 1 <= 60)
+        {
+            int randomNames = rand() % names.size();
+            line.push_back(name[randomNames]);
+            cout << names[randomNames] << " Joined the Line." << endl;
+        }
+        // Customer at back Leaves
+        if (rand() % 100 + 1 <= 20 && !line.emptyLine())
+        {
+            cout << line.backLine() << " is served." << endl;
+            line.pop_back();
+        }
+    }
 
     cout << MIN_NR + MIN_LS + MAX_NR + MAX_LS; // dummy statement to avoid compiler warning
     return 0;
