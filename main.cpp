@@ -1,8 +1,7 @@
-//Kit Pollinger
-//210 - Midterm 2
+// Kit Pollinger
+// 210 - Midterm 2
 
-
-//210 - Midterm 2 starter code
+// 210 - Midterm 2 starter code
 #include <iostream>
 #include <vector>
 #include <string>
@@ -202,31 +201,31 @@ public:
         return count;
     }
 
-    // Prints the list elements in forward order
+    // Prints list elements in front order
     void print(const vector<string> &names) const
     {
         Node *current = head;
         if (!current)
         {
-            cout << "List is empty." << endl;
+            cout << "    List is empty." << endl; // Change to match expected output
             return;
         }
 
         while (current)
         {
-            cout << names[current->data];
-            if (current->isVIP)
-                cout << " (VIP)";
-            cout << " ";
+            cout << "        " << names[current->data]; // Indentation for each name
+            if (current->next)
+            {
+                cout << endl; // Print on a new line for every name except the last
+            }
             current = current->next;
         }
-        cout << endl;
+        cout << endl; // new line at the end of the list
     }
 };
-
 int main()
 {
-    srand(time(nullptr)); // Seed random number generator
+    srand(time(nullptr)); //random number generator
 
     // Read names from file
     vector<string> names;
@@ -252,38 +251,40 @@ int main()
     cout << "Store opens:" << endl;
     for (int i = 0; i < 5; ++i)
     {
-        int randomIndex = rand() % names.size();
-        line.push_back(randomIndex); // Store index in the list
-        cout << names[randomIndex] << " joined the line." << endl;
+        int randomNames = rand() % names.size();
+        line.push_back(randomNames); // Store index in the list
+        cout << "    " << names[randomNames] << " joined the line." << endl;
     }
-    // Print the resulting line
-    cout << "Resulting line: " << endl;
-    line.print(names); // Print the line with customer names
+
+    // Print resulting line
+    cout << "    Resulting line:" << endl;
+    line.print(names); // Print line with customer names
     cout << endl;
 
+    // Start simulation
     while (currentTime <= totalTime)
     {
-        cout << "Time step #" << currentTime << endl;
+        cout << "Time step #" << currentTime << ":" << endl;
 
         // Customer served at the front
         if (rand() % 100 + 1 <= 40 && !line.lineEmpty())
         {
-            cout << names[line.frontLine()] << " is served." << endl;
+            cout << "    " << names[line.frontLine()] << " is served." << endl;
             line.pop_front();
         }
 
         // New customer joins the end
         if (rand() % 100 + 1 <= 60)
         {
-            int randomIndex = rand() % names.size();
-            line.push_back(randomIndex); // Store index
-            cout << names[randomIndex] << " joined the line." << endl;
+            int randomNames = rand() % names.size();
+            line.push_back(randomNames); // Store index
+            cout << "    " << names[randomNames] << " joined the line." << endl;
         }
 
         // Customer at the end leaves
         if (rand() % 100 + 1 <= 20 && !line.lineEmpty())
         {
-            cout << names[line.backLine()] << " (at the rear) left the line." << endl;
+            cout << "    " << names[line.backLine()] << " (at the rear) left the line." << endl;
             line.pop_back();
         }
 
@@ -292,22 +293,22 @@ int main()
         {
             if (rand() % 100 + 1 <= 10)
             {
-                cout << names[line.get(i)] << " left the line." << endl;
+                cout << "    " << names[line.get(i)] << " left the line." << endl;
                 line.delete_pos(i);
                 break; // Only one customer can leave per time step
             }
         }
 
-        // VIP customer joins the front
+        // VIP customers
         if (rand() % 100 + 1 <= 10)
         {
-            int randomIndex = rand() % names.size();
-            line.push_front(randomIndex, true); // Store index and set VIP
-            cout << names[randomIndex] << " (VIP) joined the front of the line." << endl;
+            int randomNames = rand() % names.size();
+            line.push_front(randomNames, true); // Store index +  VIP
+            cout << "    " << names[randomNames] << " (VIP) joined the front of the line." << endl;
         }
 
         // Print the current line
-        cout << "Resulting line:" << endl;
+        cout << "    Resulting line:" << endl;
         line.print(names);
         cout << endl;
 
