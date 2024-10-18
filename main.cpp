@@ -259,6 +259,27 @@ public:
         }
         return tail->data;
     }
+    //Size of the list
+    int Linesize() const {
+        Node *current = head;
+        int count = 0;
+        while (current != nullptr){
+            ++count;
+            current = current -> next;
+        }
+        return count;
+    }
+    //Returns value of element
+    int getCustomer(int pos) const {
+        if (pos < 1 || pos > Linesize()){
+            throw runtime_error("Invalid position: " + to_string(pos));
+        }
+        Node *current = head;
+        for (int i = 1; i < pos; i ++){
+            current = current -> next;
+        }
+        return current -> data;
+    }
 };
 
 int main()
@@ -316,6 +337,13 @@ int main()
         {
             cout << line.backLine() << " is served." << endl;
             line.pop_back();
+        }
+        //Any Customer Leaves
+        for (int i = 0; i < line.Linesize(); i++){
+            if (rand () % 100 + 1 <= 10){
+                cout << line.getCustomer(i) << " Left the Line." << endl;
+                line.delete_pos(i + 1);
+            }
         }
     }
 
